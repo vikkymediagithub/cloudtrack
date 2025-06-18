@@ -92,3 +92,8 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* Optional: Tailwind config should allow these utilities */
+.grid-cols-[auto_1fr] {
+  grid-template-columns: auto 1fr;
+}
