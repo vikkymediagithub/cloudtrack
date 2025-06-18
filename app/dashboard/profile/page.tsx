@@ -17,6 +17,7 @@ import { Camera, Save, User, Mail, Phone, Building, FileText } from "lucide-reac
 import { getCurrentUser, updateUser, uploadFile } from "@/lib/supabase"
 import { useToast } from "@/hooks/use-toast"
 
+
 export default function ProfilePage() {
   const [user, setUser] = useState<any>(null)
   const [loading, setLoading] = useState(true)

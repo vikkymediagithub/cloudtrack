@@ -82,8 +82,7 @@ export default function LandingPage() {
               </h1>
 
               <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 dark:text-gray-300 leading-relaxed max-w-2xl">
-                CloudTrack revolutionizes how teams collaborate. Streamline projects, manage tasks, and boost
-                productivity with our intelligent platform designed for modern workplaces.
+                Cloudtrack centralized projects, resources and staff management platform tailored for Cloudware Technologies to streamline workflow, collaboration, and resources visibility across team.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 pt-4">

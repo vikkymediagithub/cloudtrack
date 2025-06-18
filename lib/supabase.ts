@@ -1,15 +1,3 @@
-// import { createClient } from "@supabase/supabase-js"
-
-// const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-// const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-
-// export const supabase = createClient(supabaseUrl, supabaseAnonKey)
-
-// export const supabase = createClient(
-//   process.env.NEXT_PUBLIC_SUPABASE_URL!,
-//   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-// );
-
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
@@ -542,67 +530,30 @@ export const updateUser = async (id: string, updates: Partial<User>) => {
   }
 }
 
-// // File upload function
-// export const uploadFile = async (file: File, bucket: string, path: string) => {
-//   try {
-//     const { data, error } = await supabase.storage.from(bucket).upload(path, file, {
-//       cacheControl: "3600",
-//       upsert: true,
-//     })
-
-//     if (error) {
-//       console.error("Upload file error:", error)
-//       throw error
-//     }
-
-//     const { data: urlData } = supabase.storage.from(bucket).getPublicUrl(path)
-
-//     return {
-//       path: data.path,
-//       url: urlData.publicUrl,
-//     }
-//   } catch (error) {
-//     console.error("Upload file error:", error)
-//     throw error
-//   }
-// }
-
 // File upload function
 export const uploadFile = async (file: File, bucket: string, path: string) => {
   try {
-    console.log("🌐 Uploading file to", bucket, "at path:", path);
-    const { data: uploadData, error: uploadError } = await supabase
-      .storage
-      .from(bucket)
-      .upload(path, file, {
-        cacheControl: "3600",
-        upsert: true,
-      });
+    const { data, error } = await supabase.storage.from(bucket).upload(path, file, {
+      cacheControl: "3600",
+      upsert: true,
+    })
 
-    if (uploadError || !uploadData) {
-      console.error("❌ Upload failed:", uploadError);
-      throw new Error(uploadError?.message || "Upload failed without error");
+    if (error) {
+      console.error("Upload file error:", error)
+      throw error
     }
 
-    const { data: urlData, error: urlError } = supabase
-      .storage
-      .from(bucket)
-      .getPublicUrl(path);
-
-    if (urlError || !urlData?.publicUrl) {
-      console.error("❌ Failed to get public URL:", urlError);
-      throw new Error(urlError?.message || "No public URL returned");
-    }
+    const { data: urlData } = supabase.storage.from(bucket).getPublicUrl(path)
 
     return {
-      path: uploadData.path,
+      path: data.path,
       url: urlData.publicUrl,
-    };
+    }
   } catch (error) {
-    console.error("❌ uploadFile() error:", error);
-    throw error;
+    console.error("Upload file error:", error)
+    throw error
   }
-};
+}
 
 
 // Notification functions

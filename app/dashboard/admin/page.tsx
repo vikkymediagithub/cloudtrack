@@ -167,7 +167,7 @@ export default function AdminDashboard() {
 
   const teamComposition = users.reduce((acc, user) => {
     const role = user.role.charAt(0).toUpperCase() + user.role.slice(1)
-    const existing = acc.find((item) => item.role === role)
+    const existing = acc.find((item: { role: any }) => item.role === role)
     if (existing) {
       existing.count++
     } else {
@@ -190,18 +190,18 @@ export default function AdminDashboard() {
           )}
 
           {/* Header */}
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
             <div>
-              <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-              <p className="text-muted-foreground">Welcome back, {user.first_name}!</p>
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">Admin Dashboard</h1>
+              <p className="text-sm sm:text-base text-muted-foreground">Welcome back, {user.first_name}!</p>
             </div>
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
               {/* router-to-project */}
               <Button onClick={() => router.push(`/dashboard/${user.role}/projects`)}>
                 <Plus className="h-4 w-4 mr-2" />
                 Create Project
               </Button>
-              <Button variant="outline" onClick={handleDownloadReport}>
+              <Button variant="outline" onClick={handleDownloadReport} className="w-full sm:w-auto">
                 <Download className="h-4 w-4 mr-2" />
                 Download Report
               </Button>
@@ -209,8 +209,8 @@ export default function AdminDashboard() {
           </div>
 
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-            <Card>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <Card className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 shadow-md rounded-xl">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Total Projects</CardTitle>
                 <FolderOpen className="h-4 w-4 text-muted-foreground" />
@@ -266,67 +266,78 @@ export default function AdminDashboard() {
 
           {/* Charts */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-            <Card>
+            {/* Activity Overview */}
+            <Card className="w-full">
               <CardHeader>
                 <CardTitle>Activity Overview</CardTitle>
                 <CardDescription>Weekly tasks and projects activity</CardDescription>
               </CardHeader>
               <CardContent>
-                <ChartContainer
-                  config={{
-                    tasks: {
-                      label: "Tasks",
-                      color: "hsl(var(--chart-1))",
-                    },
-                    projects: {
-                      label: "Projects",
-                      color: "hsl(var(--chart-2))",
-                    },
-                  }}
-                  className="h-[300px]"
-                >
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={activityData}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="name" />
-                      <YAxis />
-                      <ChartTooltip content={<ChartTooltipContent />} />
-                      <Bar dataKey="tasks" fill="var(--color-tasks)" name="Tasks" />
-                      <Bar dataKey="projects" fill="var(--color-projects)" name="Projects" />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </ChartContainer>
+                <div className="w-full overflow-x-auto">
+                  <div className="min-w-[320px]">
+                    <ChartContainer
+                      config={{
+                        tasks: {
+                          label: "Tasks",
+                          color: "hsl(var(--chart-1))",
+                        },
+                        projects: {
+                          label: "Projects",
+                          color: "hsl(var(--chart-2))",
+                        },
+                      }}
+                      className="h-[300px]"
+                    >
+                      <ResponsiveContainer width="100%" height={250}>
+                        <BarChart data={activityData}>
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <XAxis dataKey="name" />
+                          <YAxis />
+                          <Bar dataKey="tasks" fill="hsl(var(--chart-1))" />
+                          <Bar dataKey="projects" fill="hsl(var(--chart-2))" />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </ChartContainer>
+                  </div>
+                </div>
               </CardContent>
             </Card>
 
-            <Card>
+            {/* Team Composition */}
+            <Card className="w-full">
               <CardHeader>
                 <CardTitle>Team Composition</CardTitle>
                 <CardDescription>Distribution of team members by role</CardDescription>
               </CardHeader>
               <CardContent>
-                <ChartContainer
-                  config={{
-                    count: {
-                      label: "Count",
-                      color: "hsl(var(--chart-1))",
-                    },
-                  }}
-                  className="h-[300px]"
-                >
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={teamComposition}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="role" />
-                      <YAxis />
-                      <ChartTooltip content={<ChartTooltipContent />} />
-                      <Bar dataKey="count" fill="var(--color-count)" />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </ChartContainer>
+                <div className="w-full overflow-x-auto">
+                  <div className="min-w-[320px]">
+                    <ChartContainer
+                      config={{
+                        count: {
+                          label: "Count",
+                          color: "hsl(var(--chart-1))",
+                        },
+                      }}
+                      className="h-[300px]"
+                    >
+                      <ResponsiveContainer width="100%" height={250}>
+                        <BarChart data={teamComposition}>
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <XAxis dataKey="role" />
+                          <YAxis />
+                          <ChartTooltip content={<ChartTooltipContent />} />
+                          <Bar dataKey="count" fill="var(--color-count)" />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </ChartContainer>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </div>
+
+
 
           {/* Recent Projects */}
           <Card>
