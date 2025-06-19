@@ -216,7 +216,7 @@ export default function AdminAnalyticsPage() {
           </div>
 
           {/* Charts Row 1 */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+          {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
             <Card>
               <CardHeader>
                 <CardTitle>Project Status Distribution</CardTitle>
@@ -290,10 +290,10 @@ export default function AdminAnalyticsPage() {
                 </ChartContainer>
               </CardContent>
             </Card>
-          </div>
+          </div> */}
 
           {/* Charts Row 2 */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+          {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
             <Card>
               <CardHeader>
                 <CardTitle>Monthly Activity Trends</CardTitle>
@@ -380,7 +380,7 @@ export default function AdminAnalyticsPage() {
                 </ChartContainer>
               </CardContent>
             </Card>
-          </div>
+          </div> */}
 
           {/* Performance Metrics */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">

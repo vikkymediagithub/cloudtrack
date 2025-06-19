@@ -1,27 +1,32 @@
-import type React from "react"
-import type { Metadata } from "next"
+import type { ReactNode } from "react"
 import { Inter } from "next/font/google"
+import { Metadata } from "next"
 import "./globals.css"
+
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/toaster"
 
-const inter = Inter({ subsets: ["latin"] })
+// Load Inter font
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
 
+// Metadata for SEO and head tags
 export const metadata: Metadata = {
   title: "CloudTrack - Task & Team Management",
   description: "Ultimate task and team management solution for CloudWare Technologies",
-    generator: 'v0.dev'
+  generator: "v0.dev",
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+      <head />
+      <body className={`${inter.variable} font-sans antialiased`}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
           {children}
           <Toaster />
         </ThemeProvider>
@@ -29,4 +34,3 @@ export default function RootLayout({
     </html>
   )
 }
-

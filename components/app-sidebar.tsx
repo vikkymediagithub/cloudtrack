@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter, usePathname } from "next/navigation"
 import {
   BarChart3,
@@ -17,10 +17,16 @@ import {
   Activity,
   Menu,
   ChevronLeft,
+  X,
 } from "lucide-react"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { signOut } from "@/lib/supabase"
 import { useToast } from "@/hooks/use-toast"
@@ -39,7 +45,9 @@ export function AppSidebar({ user }: AppSidebarProps) {
   const router = useRouter()
   const pathname = usePathname()
   const { toast } = useToast()
+
   const [collapsed, setCollapsed] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
 
   const handleLogout = async () => {
     try {
@@ -96,13 +104,14 @@ export function AppSidebar({ user }: AppSidebarProps) {
 
   const navigationItems = getNavigationItems()
 
-  return (
-    <aside
-      className={`h-screen bg-white dark:bg-zinc-900 border-r shadow-sm flex flex-col transition-all duration-300 ease-in-out ${
+  // Desktop Sidebar (always visible on lg and up)
+  const SidebarContent = (
+    <div
+      className={`h-full bg-white dark:bg-zinc-900 border-r shadow-sm flex flex-col transition-all duration-300 ease-in-out ${
         collapsed ? "w-[72px]" : "w-64"
       }`}
     >
-      {/* Top Logo & Toggle */}
+      {/* Top Section */}
       <div className="flex items-center justify-between px-4 py-5 border-b dark:border-zinc-800">
         <div className="flex items-center gap-2">
           <Cloud className="h-6 w-6 text-primary" />
@@ -115,13 +124,20 @@ export function AppSidebar({ user }: AppSidebarProps) {
         </div>
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="text-muted-foreground hover:text-primary transition"
+          className="text-muted-foreground hover:text-primary transition hidden lg:block"
         >
           {collapsed ? <Menu className="h-5 w-5" /> : <ChevronLeft className="h-5 w-5" />}
         </button>
+        {/* Mobile close icon */}
+        <button
+          onClick={() => setMobileOpen(false)}
+          className="text-muted-foreground hover:text-primary transition lg:hidden"
+        >
+          <X className="h-5 w-5" />
+        </button>
       </div>
 
-      {/* Navigation Links */}
+      {/* Navigation */}
       <nav className="flex flex-col gap-1 mt-6 px-3">
         {navigationItems.map((item) => {
           const isActive = pathname === item.url
@@ -142,10 +158,9 @@ export function AppSidebar({ user }: AppSidebarProps) {
         })}
       </nav>
 
-      {/* Spacer */}
       <div className="flex-1" />
 
-      {/* Bottom Profile & Theme */}
+      {/* Bottom Profile */}
       <div className="border-t dark:border-zinc-800 px-4 py-4 space-y-3">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -182,6 +197,34 @@ export function AppSidebar({ user }: AppSidebarProps) {
           </div>
         )}
       </div>
-    </aside>
+    </div>
+  )
+
+  return (
+    <>
+      {/* Mobile Menu Icon - fixed at top right of dashboard header text area */}
+      <div className="lg:hidden fixed top-4 right-4 z-50">
+        <button
+          onClick={() => setMobileOpen(true)}
+          className="p-2 rounded-md bg-muted text-muted-foreground shadow hover:text-primary"
+        >
+          <Menu className="h-5 w-5" />
+        </button>
+      </div>
+
+      {/* Mobile Sidebar Overlay */}
+      {mobileOpen && (
+        <div className="fixed inset-0 z-40 bg-black/30 lg:hidden" onClick={() => setMobileOpen(false)} />
+      )}
+
+      {/* Mobile Sidebar Panel */}
+      <div
+        className={`fixed top-0 left-0 z-50 h-full transition-transform duration-300 lg:static ${
+          mobileOpen ? "translate-x-0" : "-translate-x-full"
+        } lg:translate-x-0`}
+      >
+        {SidebarContent}
+      </div>
+    </>
   )
 }
